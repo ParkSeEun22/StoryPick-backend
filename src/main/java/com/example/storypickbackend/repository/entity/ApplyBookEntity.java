@@ -1,9 +1,6 @@
 package com.example.storypickbackend.repository.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -11,15 +8,17 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
-public class ApplyBook {
+public class ApplyBookEntity {
 
     @Id
+    @GeneratedValue
+    private Long applyBook_id;
+
     @ManyToOne
     @JoinColumn(name="book_id")
-    private Book book;
+    private BookEntity book;
 
-    @Id
     @ManyToOne
     @JoinColumn(name="member_id")
-    private Member member;
+    private MemberEntity member;
 }

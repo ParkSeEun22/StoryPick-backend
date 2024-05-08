@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
-public class Member {
+public class MemberEntity {
 
     @Id
     private Long member_id;
