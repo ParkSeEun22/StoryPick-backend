@@ -2,8 +2,13 @@ package com.example.storypickbackend.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Builder
 public class Book {
 
     // MySQL 수정하기
