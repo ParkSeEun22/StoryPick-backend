@@ -1,4 +1,4 @@
-package com.example.storypickbackend.repository.entity;
+package com.example.storypickbackend.api.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import lombok.*;
 public class BasketEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Basket_id;
 
     @ManyToOne

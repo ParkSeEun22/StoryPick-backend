@@ -1,4 +1,4 @@
-package com.example.storypickbackend.repository.entity;
+package com.example.storypickbackend.api.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.example.storypickbackend.repository.entity;
+package com.example.storypickbackend.api.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import lombok.*;
 public class ApplyBookEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applyBook_id;
 
     @ManyToOne

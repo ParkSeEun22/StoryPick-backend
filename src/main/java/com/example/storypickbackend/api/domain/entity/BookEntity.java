@@ -1,4 +1,4 @@
-package com.example.storypickbackend.repository.entity;
+package com.example.storypickbackend.api.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +14,7 @@ public class BookEntity {
     // MySQL 수정하기
 
     @Id
-    private Long id;
+    private Long book_id;
 
     private String writer;
 
