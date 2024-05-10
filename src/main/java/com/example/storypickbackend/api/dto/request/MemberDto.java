@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class MemberDto {
 
     private Long grade;
 
-    public MemberEntity toEntity() {
+ /*   public MemberEntity toEntity() {
         MemberEntity memberEntity = MemberEntity.builder()
                 .username(username)
                 .password(password)
@@ -28,5 +30,5 @@ public class MemberDto {
                 .grade(grade)
                 .build();
         return memberEntity;
-    }
+    }*/
 }

@@ -1,7 +1,8 @@
 package com.example.storypickbackend.api.domain.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
