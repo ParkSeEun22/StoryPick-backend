@@ -10,8 +10,6 @@ import lombok.*;
 @Builder
 public class BookEntity {
 
-    // MySQL 수정하기
-
     @Id
     private Long book_id;
 
@@ -21,7 +19,7 @@ public class BookEntity {
 
     private String bookCover;
 
-    private String bookDatail;
+    private String bookDetail;
 
     private String bookLocation;
 

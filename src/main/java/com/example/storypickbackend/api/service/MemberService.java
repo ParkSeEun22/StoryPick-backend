@@ -2,7 +2,6 @@ package com.example.storypickbackend.api.service;
 
 import com.example.storypickbackend.api.domain.entity.MemberEntity;
 import com.example.storypickbackend.api.domain.repository.MemberRepository;
-import com.example.storypickbackend.api.dto.request.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class MemberService{
+public class MemberService /*implements UserDetailsService*/ {
 
     private final MemberRepository memberRepository;
 

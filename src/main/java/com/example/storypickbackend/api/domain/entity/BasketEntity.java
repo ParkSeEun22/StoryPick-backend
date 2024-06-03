@@ -12,7 +12,7 @@ public class BasketEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Basket_id;
+    private Long basket_id;
 
     @ManyToOne
     @JoinColumn(name="member_id")

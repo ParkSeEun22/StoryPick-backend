@@ -22,7 +22,7 @@ public class MemberDto {
 
     private Long grade;
 
- /*   public MemberEntity toEntity() {
+/*    public MemberEntity toEntity() {
         MemberEntity memberEntity = MemberEntity.builder()
                 .username(username)
                 .password(password)

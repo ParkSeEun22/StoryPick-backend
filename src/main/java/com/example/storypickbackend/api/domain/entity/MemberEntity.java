@@ -25,5 +25,6 @@ public class MemberEntity{
 
     private Long grade;
 
+    private String genre;
 
 }
