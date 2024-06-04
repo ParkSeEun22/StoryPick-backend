@@ -1,7 +1,6 @@
 package com.example.storypickbackend.api.controller;
 
-
-import com.example.storypickbackend.api.domain.entity.ApplyBookEntity;
+import com.example.storypickbackend.api.dto.response.BookListDto;
 import com.example.storypickbackend.api.dto.response.ResponseVo;
 import com.example.storypickbackend.api.service.ApplyBookService;
 import com.example.storypickbackend.api.service.BookService;
@@ -10,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class BookController {
 
     // 책 리스트 나열
     @GetMapping("/booklist")
-    public ResponseEntity<ResponseVo> showApiList(@RequestParam String data) throws JsonProcessingException{
+    public ResponseEntity<List<BookListDto>> showApiList(@RequestParam String data) throws JsonProcessingException{
         String apiKey = data;
 
         String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={apiKey}&QueryType=ItemNewAll&MaxResults=MAX_RESULTS&start=1&SearchTarget=Book&output=js&Version=20131101";
@@ -49,7 +51,8 @@ public class BookController {
                 .bodyToMono(String.class)
                 .block();
 
-        bookService.fetchListData(res , MAX_RESULTS);
+
+        List<BookListDto> bookList = bookService.fetchListData(res , MAX_RESULTS);
 
         ResponseVo responseVo = new ResponseVo();
 
@@ -61,12 +64,12 @@ public class BookController {
             responseVo.setUcd("00");
             responseVo.setMessage(res);
         }
-        return ResponseEntity.ok(responseVo);
+        return ResponseEntity.ok().body(bookList);
     }
 
     // 책 상세 정보
     @GetMapping("/bookinfo")
-    public ResponseEntity<ResponseVo> showBookInfo(@RequestParam String data, @RequestParam String itemId) throws JsonProcessingException {
+    public ResponseEntity<BookListDto> showBookInfo(@RequestParam String data, @RequestParam String itemId) throws JsonProcessingException {
         String apiKey = data;   //ttbcmss03302033001
 
         String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey={apiKey}&itemIdType=ISBN&ItemId={itemId}&output=js&Version=20131101&OptResult=ratingInfo,reviewList";
@@ -77,7 +80,7 @@ public class BookController {
                 .bodyToMono(String.class)
                 .block();
 
-        bookService.fetchData(res);
+        BookListDto bookListDto = bookService.fetchData(res);
 
         ResponseVo responseVo = new ResponseVo();
 
@@ -89,16 +92,9 @@ public class BookController {
             responseVo.setUcd("00");
             responseVo.setMessage(res);
         }
-        return ResponseEntity.ok(responseVo);
+        return ResponseEntity.ok().body(bookListDto);
 
     }
-
-    @PostMapping("/bookinfo")
-    public Long ApplyBook(@RequestParam ApplyBookEntity applyBookEntity) {
-        // isbn 정보 and 현재 로그인 중인 회원 id
-        return applyBookService.saveApply(applyBookEntity);
-    }
-
 
     /*
     //service에서 book객체로 저장된 걸 가져온다

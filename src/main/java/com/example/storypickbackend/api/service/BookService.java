@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,27 +23,31 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public void fetchListData(String res, int max) throws JsonProcessingException {
+    public List<BookListDto> fetchListData(String res, int max) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(res);
 
-        BookListDto bookListDto = new BookListDto();
+        List<BookListDto> bookList = new ArrayList<>();
 
         if(res != null) {
             for(int i = 0; i < max; i++) {
+                BookListDto bookListDto = new BookListDto();
                 bookListDto.setTitle(rootNode.get("item").get(i).get("title").asText());
                 bookListDto.setIsbn(rootNode.get("item").get(i).get("isbn13").asText());
                 bookListDto.setCover(rootNode.get("item").get(i).get("cover").asText());
 
+                bookList.add(bookListDto);
 /*                System.out.println("Title: " + bookListDto.getTitle());
                 System.out.println("ISBN13: " + bookListDto.getIsbn());
                 System.out.println("Cover: " + bookListDto.getCover());*/
             }
         }
 
+        return bookList;
+
     }
 
-    public void fetchData(String res) throws JsonProcessingException {
+    public BookListDto fetchData(String res) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(res);
 
@@ -55,15 +61,7 @@ public class BookService {
         bookListDto.setCategoryName(rootNode.get("item").get(0).get("categoryName").asText());
         bookListDto.setRatingScore(rootNode.get("item").get(0).get("subInfo").get("ratingInfo").get("ratingScore").asInt());
 
-
-/*        System.out.println("Title: " + title);
-        System.out.println("Author: " + author);
-        System.out.println("ISBN13: " + isbn13);
-        System.out.println("Cover: " + cover);
-        System.out.println("Description: " + description);
-        System.out.println("category: " + category);
-        System.out.println("rating: " +ratingScore);*/
-
+        return bookListDto;
     }
 
 }
