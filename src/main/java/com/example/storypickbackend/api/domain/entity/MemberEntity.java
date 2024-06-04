@@ -16,7 +16,7 @@ public class MemberEntity{
     private Long member_id;
 
     @Column(nullable = false)
-    private String username;
+    private String userName;
 
     @Column(nullable = false)
     private String password;

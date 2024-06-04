@@ -48,10 +48,39 @@ public class BookController {
         return ResponseEntity.ok(responseVo);
     }
 
+    // 책 리스트 나열
+    @GetMapping("/booklist")
+    public ResponseEntity<ResponseVo> showApiList(@RequestParam String data) {
+        String apiKey = data;
+
+        String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={apiKey}&QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&output=xml&Version=20131101";
+        String res = webClientBuilder.build()
+                .get()
+                .uri(apiUrl, apiKey, data)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        System.out.println(res);
+
+        ResponseVo responseVo = new ResponseVo();
+
+        if(res == null){
+            responseVo.setUcd("99");
+            responseVo.setMessage("실패");
+        }
+        else{
+            responseVo.setUcd("00");
+            responseVo.setMessage(res);
+        }
+        return ResponseEntity.ok(responseVo);
+    }
+
+    // 책 상세 정보
     @GetMapping("/bookinfo")
     public ResponseEntity<ResponseVo> testApi(@RequestParam String data) {
         String apiKey = data;   //ttbcmss03302033001
-        String itemId = "9791155817049";
+        String itemId = "9791193078174";
 
         String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey={apiKey}&itemIdType=ISBN&ItemId={itemId}&output=xml&Version=20131101&OptResult=ebookList,usedList,reviewList";
         String res = webClientBuilder.build()

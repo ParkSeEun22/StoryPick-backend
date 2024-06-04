@@ -1,3 +1,4 @@
+/*
 package com.example.storypickbackend.api.config;
 
 
@@ -40,9 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 페이지 권한 설정
-                /*.antMatchers("/admin/**").hasRole("ADMIN")
+                */
+/*.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/myinfo").hasRole("MEMBER")
-                .antMatchers("/**").permitAll()*/
+                .antMatchers("/**").permitAll()*//*
+
             .and() // 로그인 설정
                 .formLogin()
                 .loginPage("/member/login")
@@ -58,3 +61,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/member/denied");
     }
 }
+*/
