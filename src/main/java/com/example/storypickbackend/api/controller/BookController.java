@@ -1,13 +1,12 @@
 package com.example.storypickbackend.api.controller;
 
 
+import com.example.storypickbackend.api.domain.entity.ApplyBookEntity;
 import com.example.storypickbackend.api.dto.response.ResponseVo;
+import com.example.storypickbackend.api.service.ApplyBookService;
 import com.example.storypickbackend.api.service.BookService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,26 +17,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 //@CrossOrigin(origins = "*")
 public class BookController {
 
-    private BookService bookService;
+    private final BookService bookService;
+    private final ApplyBookService applyBookService;
     private final WebClient.Builder webClientBuilder;
+    private final int MAX_RESULTS = 10;
 
     @GetMapping("/api")
     public String springData(String msg) {
         return msg;
     }
-
-
-    /*
-    //service에서 book객체로 저장된 걸 가져온다
-    @PostMapping("/")
-    @Operation(hidden = true)
-    public ResponseEntity<ApiResponse> fetchDataFromApi() {
-        bookService.fetchData();
-        ApiResponse response = new ApiResponse<>(true, "책 데이터 DB 저장 완료");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    */
-
 
 
     @GetMapping("/hello")
@@ -50,10 +38,10 @@ public class BookController {
 
     // 책 리스트 나열
     @GetMapping("/booklist")
-    public ResponseEntity<ResponseVo> showApiList(@RequestParam String data) {
+    public ResponseEntity<ResponseVo> showApiList(@RequestParam String data) throws JsonProcessingException{
         String apiKey = data;
 
-        String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={apiKey}&QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&output=xml&Version=20131101";
+        String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={apiKey}&QueryType=ItemNewAll&MaxResults=MAX_RESULTS&start=1&SearchTarget=Book&output=js&Version=20131101";
         String res = webClientBuilder.build()
                 .get()
                 .uri(apiUrl, apiKey, data)
@@ -61,7 +49,7 @@ public class BookController {
                 .bodyToMono(String.class)
                 .block();
 
-        System.out.println(res);
+        bookService.fetchListData(res , MAX_RESULTS);
 
         ResponseVo responseVo = new ResponseVo();
 
@@ -78,11 +66,10 @@ public class BookController {
 
     // 책 상세 정보
     @GetMapping("/bookinfo")
-    public ResponseEntity<ResponseVo> testApi(@RequestParam String data) {
+    public ResponseEntity<ResponseVo> showBookInfo(@RequestParam String data, @RequestParam String itemId) throws JsonProcessingException {
         String apiKey = data;   //ttbcmss03302033001
-        String itemId = "9791193078174";
 
-        String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey={apiKey}&itemIdType=ISBN&ItemId={itemId}&output=xml&Version=20131101&OptResult=ebookList,usedList,reviewList";
+        String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey={apiKey}&itemIdType=ISBN&ItemId={itemId}&output=js&Version=20131101&OptResult=ratingInfo,reviewList";
         String res = webClientBuilder.build()
                 .get()
                 .uri(apiUrl, apiKey, itemId, data)
@@ -90,7 +77,7 @@ public class BookController {
                 .bodyToMono(String.class)
                 .block();
 
-        System.out.println(res);
+        bookService.fetchData(res);
 
         ResponseVo responseVo = new ResponseVo();
 
@@ -103,7 +90,26 @@ public class BookController {
             responseVo.setMessage(res);
         }
         return ResponseEntity.ok(responseVo);
+
     }
+
+    @PostMapping("/bookinfo")
+    public Long ApplyBook(@RequestParam ApplyBookEntity applyBookEntity) {
+        // isbn 정보 and 현재 로그인 중인 회원 id
+        return applyBookService.saveApply(applyBookEntity);
+    }
+
+
+    /*
+    //service에서 book객체로 저장된 걸 가져온다
+    @PostMapping("/")
+    @Operation(hidden = true)
+    public ResponseEntity<ApiResponse> fetchDataFromApi() {
+        bookService.fetchData();
+        ApiResponse response = new ApiResponse<>(true, "책 데이터 DB 저장 완료");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    */
 
 
 
